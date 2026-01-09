@@ -1,0 +1,157 @@
+% For XeLaTeX or LuaTex compilers
+% to use minted copy vs_code_settings.json to your vscode settings
+
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,top=3cm,bottom=3cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}
+\setlength{\parskip}{1em}
+\setlength{\headheight}{13.59999pt}
+\usepackage{setspace}
+\setstretch{1.15} % similar to MS Word 1.0 line spacing
+% Multilanguage support
+\usepackage{polyglossia}
+
+% Math symbols
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% float
+\usepackage{float}
+
+%headers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{Ρομποτική 1}
+\chead{Άσκηση 2 - \emph{Pendubot} - A3-4}
+\rhead{Χειμερινό Εξάμηνο 2025-26}
+
+%table
+\usepackage{tabularx,booktabs}
+\usepackage{xcolor,colortbl}
+\usepackage{multirow}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcolumntype{M}{>{\columncolor{blue}\centering\arraybackslash}c}
+
+% Image figures
+\usepackage{graphicx}
+% Look in local images and sibling diagrams folder
+\graphicspath{{./images/}{../Pendubot - Διαγράμματα/}}
+
+% Figures inside figures
+\usepackage{subfigure}
+
+% Color text
+\usepackage[dvipsnames, svgnames]{xcolor}
+
+% Text positioning
+\usepackage{ragged2e}
+
+% code
+\usepackage{listings}
+
+% inline fractions
+\usepackage{nicefrac}
+
+% fucking arrows
+\usepackage{tikz}
+\usetikzlibrary{tikzmark}
+
+% Links
+\usepackage[pdfusetitle]{hyperref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=black,
+	urlcolor=teal
+}
+
+
+
+% Code snippets
+% \usepackage[newfloat]{minted}
+
+% Better figure captions
+\usepackage{caption}
+
+% Whatever
+\usepackage{enumitem}
+
+% whatever
+% \usepackage{svg}
+
+% Fonts - For greek use a font with the required characters
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{Calibri}
+\newfontfamily\greekfonttt{Consolas}
+\setmonofont{Consolas}
+\newfontfamily\tahoma{tahoma.ttf}[
+	BoldFont= tahomabd.ttf,
+	Scale=0.9
+]
+\newfontfamily\cambria{Cambria}
+\newfontfamily\consolas{Consolas}
+\newfontfamily\palatino{Palatino Linotype}
+\newfontfamily\trebuc{trebuc.ttf}[
+	BoldFont=trebucbd.ttf,
+	ItalicFont=trebucit.ttf,
+	BoldItalicFont=trebucbi.ttf
+]
+
+\setdefaultlanguage{greek}
+
+\newcounter{my_exercise_counter}
+\newenvironment*{exercise}{
+	\refstepcounter{my_exercise_counter}\pdfbookmark[0]{Άσκηση~\arabic{my_exercise_counter}}{ex.\arabic{my_exercise_counter}.0}
+	{\rule{\textwidth}{0.1pt}\\\vspace{0.5\baselineskip}\noindent\centering\Large\bfseries Άσκηση~\arabic{my_exercise_counter}.\\
+	}\vspace{0.3\baselineskip}\justifying 
+}{~\vspace{18pt}}
+
+
+
+\begin{document}
+% \tahoma
+\justifying
+
+\begin{titlepage}
+    % \vspace*{1cm}
+    \begin{center}
+        \large
+        \textbf{Εθνικό Μετσόβιο Πολυτεχνείο}
+
+        \large
+        \textbf{Σχολή Ηλεκτρολόγων Μηχανικών και Μηχανικών Υπολογιστών}
+
+        \vspace*{5cm}
+
+		\huge
+		\textbf{Ρομποτική 1}
+
+        \Huge
+        Εργαστηριακή Άσκηση 4
+
+        \LARGE
+        Cobot
+
+        \vspace*{9cm}
+
+        \large
+        \textbf{Ομάδα Α3-4}
+        \begin{tabular}{|l | l}
+            Νικόλαος Αδαμόπουλος & 03122074 \\
+            Λεωνίδας Λαγομιτζής & 03121061 \\
+            Ηλίας-Στυλιανός Ηλιάδης & 03122140 \\
+			Ηλίας Πουλόπουλος & 03122 \\
+			?? & ??
+        \end{tabular}
+        
+    \end{center}
+\end{titlepage}
+
+\tableofcontents
+
+\newpage
+
+\section{Εισαγωγή}
+
+
+\end{document}

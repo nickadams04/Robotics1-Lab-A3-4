@@ -1,0 +1,370 @@
+% For XeLaTeX or LuaTex compilers
+% to use minted copy vs_code_settings.json to your vscode settings
+
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,top=3cm,bottom=3cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}
+\setlength{\parskip}{1em}
+\setlength{\headheight}{13.59999pt}
+\usepackage{setspace}
+\setstretch{1.15} % similar to MS Word 1.0 line spacing
+% Multilanguage support
+\usepackage{polyglossia}
+
+% Math symbols
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% float
+\usepackage{float}
+
+%headers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{Ρομποτική 1}
+\chead{Άσκηση 2 - \emph{Pendubot} - A3-4}
+\rhead{Χειμερινό Εξάμηνο 2025-26}
+
+%table
+\usepackage{tabularx,booktabs}
+\usepackage{xcolor,colortbl}
+\usepackage{multirow}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcolumntype{M}{>{\columncolor{blue}\centering\arraybackslash}c}
+
+% Image figures
+\usepackage{graphicx}
+% Look in local images and sibling diagrams folder
+\graphicspath{{./images/}{../Pendubot - Διαγράμματα/}}
+
+% Figures inside figures
+\usepackage{subfigure}
+
+% Color text
+\usepackage[dvipsnames, svgnames]{xcolor}
+
+% Text positioning
+\usepackage{ragged2e}
+
+% code
+\usepackage{listings}
+
+% inline fractions
+\usepackage{nicefrac}
+
+% fucking arrows
+\usepackage{tikz}
+\usetikzlibrary{tikzmark}
+
+% Links
+\usepackage[pdfusetitle]{hyperref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=black,
+	urlcolor=teal
+}
+
+
+
+% Code snippets
+% \usepackage[newfloat]{minted}
+
+% Better figure captions
+\usepackage{caption}
+
+% Whatever
+\usepackage{enumitem}
+
+% whatever% 
+\usepackage{svg}
+
+% Fonts - For greek use a font with the required characters
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{Calibri}
+\newfontfamily\greekfonttt{Consolas}
+\setmonofont{Consolas}
+\newfontfamily\tahoma{tahoma.ttf}[
+	BoldFont= tahomabd.ttf,
+	Scale=0.9
+]
+\newfontfamily\cambria{Cambria}
+\newfontfamily\consolas{Consolas}
+\newfontfamily\palatino{Palatino Linotype}
+\newfontfamily\trebuc{trebuc.ttf}[
+	BoldFont=trebucbd.ttf,
+	ItalicFont=trebucit.ttf,
+	BoldItalicFont=trebucbi.ttf
+]
+
+\setdefaultlanguage{greek}
+
+\newcounter{my_exercise_counter}
+\newenvironment*{exercise}{
+	\refstepcounter{my_exercise_counter}\pdfbookmark[0]{Άσκηση~\arabic{my_exercise_counter}}{ex.\arabic{my_exercise_counter}.0}
+	{\rule{\textwidth}{0.1pt}\\\vspace{0.5\baselineskip}\noindent\centering\Large\bfseries Άσκηση~\arabic{my_exercise_counter}.\\
+	}\vspace{0.3\baselineskip}\justifying 
+}{~\vspace{18pt}}
+
+
+
+\begin{document}
+% \tahoma
+\justifying
+
+\begin{titlepage}
+    % \vspace*{1cm}
+    \begin{center}
+        \large
+        \textbf{Εθνικό Μετσόβιο Πολυτεχνείο}
+
+        \large
+        \textbf{Σχολή Ηλεκτρολόγων Μηχανικών και Μηχανικών Υπολογιστών}
+
+        \vspace*{5cm}
+
+		\huge
+		\textbf{Ρομποτική 1}
+
+        \Huge
+        Εργαστηριακή Άσκηση 2
+
+        \LARGE
+        Pendubot
+
+        \vspace*{9cm}
+
+        \large
+        \textbf{Ομάδα Α3-4}
+        \begin{tabular}{|l | l}
+            Νικόλαος Αδαμόπουλος & 03122074 \\
+            Λεωνίδας Λαγομιτζής & 03121061 \\
+            Ηλίας-Στυλιανός Ηλιάδης & 03122140 \\
+			Ηλίας Πουλόπουλος & 03122 \\
+			?? & ??
+        \end{tabular}
+        
+    \end{center}
+\end{titlepage}
+
+\tableofcontents
+
+\newpage
+
+\section{Εισαγωγή}
+
+Στην εργαστηριακή άσκηση, επιδιώξαμε να ελέγξουμε τον ρομποτικό μηχανισμό Pendubot με χρήση γραμμικού PD ελέγχου και χρήση μη γραμμικού ελέγχου.
+
+Αρχικά, επιχειρήσαμε να τοποθετήσουμε μία μεμονωμένη άρθρωση του μηχανισμού αυτού σε γωνία $30°$ με χρήση γραμμικού PD ελέγχου, δοκιμάζοντας διάφορες τιμές των συντελεστών $K_p, K_d$. Σε όλα τα πειράματά μας, παρατηρήσαμε ωστόσο σημαντικό σφάλμα μόνιμης κατάστασης. 
+
+Για να λάβουμε καλύτερα αποτελέσματα, περιορίσαμε την επίδραση της βαρύτητας προσθέτοντας τον όρο αντιστάθμισης $g_1$ στο καλύτερο μοντέλο μας, οπότε και αποκτήσαμε αρνητικό σφάλμα. Προκειμένου να κατανοήσουμε την επίδραση του όρου $g_1$ στο Pendubot, μελετήσαμε την ειδική περίπτωση $(K_p,K_d)=(0,0)$, διαπιστώνοντας πως ο όρος $g_1$ αδυνατεί να αντισταθμίσει πλήρως τη βαρύτητα.
+
+Τέλος, εξετάσαμε την λειτουργία ενός πλήρους µη γραμμικού ελεγκτή (δύο φάσεων) για την εξισορρόπηση του αναστροφου εκκρεμούς στην ενδιάμεση θέση ασταθούς ισορροπίας.
+
+\section{Πειραματική Διάταξη}
+
+Το Pendubot είναι ένας ρομποτικός μηχανισμός τύπου "ανάστροφο εκκρεμές" και έχει δύο βαθμούς ελευθερίας. Ειδικότερα, ο μηχανισμός αποτελείται από δύο κινούμενους συνδέσμους (link-1, link-2) και από δύο στροφικές αρθρώσεις  (joint-1, joint-2). Σε κάθε άρθρωση, διαθέτουμε έναν οπτικό κωδικοποιητή (encoder) για την μέτρηση της γωνίας στροφής, ενώ η πρώτη άρθρωση joint-1 ενεργοποιείται από έναν κινητήρα συνεχούς ρεύματος (DC Motor). Η δεύτερη άρθρωση, παρότι ελεύθερη να κινηθεί περιστροφικά, δεν διαθέτει ανεξάρτητο ενεργοποιητή, οπότε συνιστά μία υποοδηγούμενη άρθρωση.
+
+Η πειραματική διάταξη αναπαριστάται στο Σχήμα 1 του εργαστηριακού οδηγού, το οποίο επισυνάπτουμε ακολούθως:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth]{pendubot-schematic.png}
+	\caption{Κινηματική Δομή ρομποτικού μηχανισμού \emph{Pendubot}}
+	\label{fig:pendubot-schematic}
+\end{figure}
+
+\section{Θεωρητικό Υπόβαθρο}
+\subsection*{PD Έλεγχος}
+
+Ο PD (Proportional–Derivative) έλεγχος είναι ένας γραμμικός τρόπος ελέγχου. Η συνάρτηση του ελέγχου δίνεται από τη σχέση $u(t)=K_p e(t)+K_d  \frac{de}{dt}$ και έχει συνάρτηση μεταφοράς $G_{PD} (s)=K_p+K_d s$ και φαίνεται σχηματικά σε εικόνα της παρουσίασης της εργαστηριακής άσκησης την οποία επισυνάπτουμε ακολούθως:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth]{pd-schematic.png}
+	\caption{Block διάγραμμα ελεγκτή PD}
+	\label{fig:pd-schematic}
+\end{figure}
+
+\subsection*{Χαρακτηριστικά Απόκρισης}
+
+\begin{itemize}
+\item 
+{
+\textbf{Σφάλμα Μόνιμης Κατάστασης}
+
+Στα πειράματά μας, θα εργαστούμε με τη βηματική είσοδο $u(t)=1, t\geq0$ και $u(t)=0 , t<0$. Αν το σφάλμα παίρνει τελική τιμή, δηλαδή αν υπάρχει το όριο $\lim_{t \to \infty}(e(t))$, το σφάλμα μόνιμης κατάστασης δίνεται από τoν τύπο $e_{ss}=1/(1+K_P )$, όπου $K_P=\lim_{s \to 0}(G(s))$ και $G(s)$ η συνάρτηση , μεταφοράς του συστήματος ανοιχτού βρόγχου σε μετασχηματισμό Laplace.
+}
+\item 
+{
+\textbf{Υπερύψωση}
+
+Η υπερύψωση (overshoot) εκφράζει σε ποσοστό το κατά πόσο η μέγιστη τιμή της απόκρισης ξεπερνά την τιμή μόνιμης κατάστασης. Έτσι, αν θεωρήσουμε απόκριση $e$, η υπερύψωση ορίζεται ως 
+
+\begin{equation*}
+	M_p=\frac{e_{max}-e_{ss}}{e_{ss}}100\%
+\end{equation*}
+
+όπου $e_{ss}$ η τιμή τελικής κατάστασης.
+}
+\item 
+{
+\textbf{Χρόνος Ανύψωσης}
+
+Ο χρόνος ανύψωσης (rise time) ορίζεται ως το χρονικό διάστημα που μεσολάβησε προκειμένου η απόκριση να μεταβεί από το $10\%$ της τελικής τιμής στο $90\%$ της τελικής τιμής.
+}
+\end{itemize}
+
+\subsection*{Αντιστάθμιση Βαρύτητας}
+Σύμφωνα με παράρτημα του εργαστηριακού οδηγού, οι εξισώσεις κίνησης του Pendubot είναι οι ακόλουθες:
+
+\begin{gather*}
+	\tau_1 = d_{11} \frac{d^2 q_1}{dt^2} + d_{12} \frac{d^2 q_2}{dt^2} + c_{11} \dot{q_1} + \varphi_1 \\
+	0 = d_{21} \frac{d^2 q_1}{dt^2} + d_{22} \frac{d^2 q_2}{dt^2} + c_{21} \dot{q_1} + \varphi_2 \\
+\end{gather*}
+
+Όπου, $q=\begin{bmatrix} q_1 & q_2 \end{bmatrix}^T$, το διάνυσμα των γωνιών των συνδέσμων 1 και 2 αντίστοιχα,  $\tau=\begin{bmatrix} \tau_1 & 0 \end{bmatrix}^T$, το διάνυσμα της ροπής που εφαρμόζεται στους δύο συνδέσμους, $D(q)=\begin{bmatrix} d_{11} & d_{12} &;& d_{21} & d_{22} \end{bmatrix}$ η μήτρα αδράνειας του ρομπότ, $C(q)=\begin{bmatrix} c_{11} & c_{12} &;& c_{21} & c_{22} \end{bmatrix}$ οι όροι Coriolis και φυγόκεντρου δυνάμεως και $g(q)=\begin{bmatrix} \varphi_1 & \varphi_2 \end{bmatrix}^T$ το διάνυσμα της βαρύτητας.
+Οι εξισώσεις κίνησης προέκυψαν με βάση το Δυναμικό Μοντέλο Lagrange Ρομποτικού Χειριστή, σύμφωνα με το οποίο: $\tau=D(q)\ \frac{d^2q}{dt^2}+C(\dot{q},q)\dot{q}+g(q)$.
+Θεωρώντας τοπικό νόμο ελέγχου $(\dot{q}=0): u=K_p e(t)+K_d\dot{\ e(t)}+g(q)$ και μελετώντας την ευστάθεια κατά Lyapunov παίρνουμε:
+
+\begin{equation*}
+	V(q,\dot{q})=\frac{1}{2}(e^T K_p e+{(\dot{e})}^TD(q)\dot{e})
+\end{equation*}
+
+Παρατηρούμε ότι $V(q,\dot{q})=0$, όταν $e=0\ και \dot{e}=0$. Παραγωγίζοντας την συνάρτηση Lyapunov παίρνουμε
+
+\begin{equation*}
+\dot{V}(q,\dot{q})=e^TK_p\dot{e}+{(\dot{e})}^TD(q)\frac{d^2e}{dt^2}+\frac{1}{2}{(\dot{e})}^T(\dot{D})(\dot{e})\end{equation*}
+
+Δεδομένου ότι $e=q_d-q$ μπορούμε να γράψουμε:
+
+\begin{equation*}\dot{V}(q,\dot{q})=-e^TK_p\dot{q}+{(\dot{q})}^TD(q)\frac{d^2q}{dt^2}+\frac{1}{2}{(\dot{q})}^T(\dot{D})(\dot{q})\end{equation*}
+
+Επειδή η μήτρα $\dot{D}-2C$ είναι αντισυμμετρική και ισχύει $w^T(\dot{D}-2C)w=0,\ \forall w \in \mathbb{R}^n$, παίρνουμε:
+
+\begin{gather*}
+\dot{V}(q,\dot{q})=-e^TK_p\dot{q}+{(\dot{q})}^T(\tau-C\dot{q}-g(q))+\frac{1}{2}{(\dot{q})}^T(\dot{D})(\dot{q}) \\
+\dot{V}(q,\dot{q})=-e^TK_p\dot{q}+{(\dot{q})}^T(\tau-g(q)) \\
+\dot{V}(q,\dot{q})=-e^TK_p\dot{q}\ +{(\dot{q})}^T(K_pe+K_d\dot{e}+g(q)-g(q)) \\
+\dot{V}(q,\dot{q})=-e^TK_p\dot{q}\ +{(\dot{q})}^T(K_pe+K_d\dot{e}) \\
+\dot{V}(q,\dot{q})={(\dot{q})}^TK_d\dot{e} \\
+\dot{V}(q,\dot{q})=-{(\dot{q})}^TK_d\dot{q}\le0
+\end{gather*}
+
+Επιπλέον, έχουμε $\dot{V}(q,\dot{q})=0$ όταν $|\dot{q}|=0$, οπότε και για $\dot{q}=0$ έχουμε ευστάθεια Lyapunov.
+Άρα λοιπόν, αν θεωρήσουμε τοπικό νόμο ελέγχου $u=K_pe(t)+K_d\dot{\ e(t)}+g(q)$, αναμένουμε το σύστημα να είναι ευσταθές.
+
+\subsection*{Μη Γραμμικός Ελεγκτής Δύο Φάσεων}
+
+Στον μη γραμμικό ελεγκτή δύο φάσεων πρέπει να ελέγξουμε την φάση της ταλάντωσης και την φάση της εξισορρόπησης του link-2 σε όρθια θέση, οπότε χρειαζόμαστε δύο ελεγκτές.
+
+
+\pagebreak
+
+\section{Πειραματική Ρύθμιση PD Ελεγκτή}
+
+Στο πρώτο μέρος του πειράματος πραγματοποιήσαμε \textbf{σάρωση παραμέτρων} (grid search) του PD ελεγκτή σε διακριτό, μη ομοιόμορφο πλέγμα τιμών: επιλέξαμε $4$ διακριτές τιμές για τον $K_p$ και, για καθεμία, ένα διαφορετικό σύνολο $3$ τιμών για τον $K_d$ (σύνολο $12$ συνδυασμοί), επί των οποίων εφαρμόσαμε βηματική εντολή θέσης στην άρθρωση $q_1$ (από τη φυσική θέση σε $\theta_d = 30^{\circ}$).
+
+Για κάθε δοκιμή καταγράψαμε:
+\begin{itemize}[nosep]
+	\item το \textbf{σφάλμα μόνιμης κατάστασης} $e_{ss}$,
+	\item τον \textbf{χρόνο ανύψωσης} $t_r$ (10\%–90\%),
+	\item το \textbf{ποσοστό υπερύψωσης} $M_p$.
+\end{itemize}
+
+Τα αποτελέσματα συνοψίζονται ενδεικτικά στον παρακάτω πίνακα, όπου οι τιμές θα συμπληρωθούν μετρητικά:
+
+\begin{table}[H]
+    \centering
+    \caption{Πειραματικά αποτελέσματα ρύθμισης PD για διάφορα ζεύγη $(K_p,K_d)$}
+    \begin{tabular}{|c| c c | c c c|}
+         \toprule
+            Δοκιμή & $K_p$ & $K_d$ & $e_{ss}$ (deg) & $t_r$ (s) & $M_p$ (rad) \\
+            \midrule
+            1  & \multirow{3}{*}{$1$}  & $0$    & $19.34$ & $0.18$ & $0.1$    \\
+            2  &                       & $0.15$ & $19.2$  & $0.24$ & $0.014$  \\
+            3  &                       & $0.23$ & $19.48$ & $0.48$ & $0.005$  \\ \midrule
+            4  & \multirow{3}{*}{$5$}  & $0.25$ & $8.04$  & $0.12$ & $0.11$   \\
+            5  &                       & $0.4$  & $8.33$  & $0.18$ & $0.031$  \\
+            6  &                       & $0.48$ & $7.68$  & $0.48$ & $0.0062$ \\ \midrule
+            7  & \multirow{3}{*}{$10$} & $0.55$ & $4.73$  & $0.12$ & $0.038$  \\
+            8  &                       & $0.65$ & $4.58$  & $0.36$ & $0.014$  \\
+            9  &                       & $0.7$  & $4.73$  & $0.3$  & $0.0088$  \\ \midrule
+            10 & \multirow{3}{*}{$20$} & $0.8$  & $2.64$  & $0.12$ & $0.043$  \\
+            11 &                       & $0.95$ & $2.136$ & $0.42$ & $0.0038$ \\
+            12 &                       & $1.3$  & $2.28$  & $0.42$ & $0.0038$ \\
+            \bottomrule
+    \end{tabular}
+\end{table}
+
+Για καθεμία από τις παραπάνω δοκιμές, παραθέτουμε και τα αντίστοιχα διαγράμματα, τα οποία συλλέχθηκαν κατά την εκτέλεση.
+
+
+% Grid of PD trial figures: rows by K_p, columns by K_d
+\begin{figure}[H]
+\centering
+\renewcommand{\thesubfigure}{\arabic{subfigure}.}
+
+% K_p = 1
+\subfigure[$K_p=1,\ K_d=0.00$]{\includegraphics[width=.30\textwidth]{1_0.00.pdf}}
+\subfigure[$K_p=1,\ K_d=0.15$]{\includegraphics[width=.30\textwidth]{1_0.15.pdf}}
+\subfigure[$K_p=1,\ K_d=0.23$]{\includegraphics[width=.30\textwidth]{1_0.23.pdf}}
+
+% K_p = 5
+\subfigure[$K_p=5,\ K_d=0.25$]{\includegraphics[width=.30\textwidth]{5_0.25.pdf}}
+\subfigure[$K_p=5,\ K_d=0.40$]{\includegraphics[width=.30\textwidth]{5_0.40.pdf}}
+\subfigure[$K_p=5,\ K_d=0.48$]{\includegraphics[width=.30\textwidth]{5_0.48.pdf}}
+
+% K_p = 10
+\subfigure[$K_p=10,\ K_d=0.55$]{\includegraphics[width=.30\textwidth]{10_0.55.pdf}}
+\subfigure[$K_p=10,\ K_d=0.65$]{\includegraphics[width=.30\textwidth]{10_0.65.pdf}}
+\subfigure[$K_p=10,\ K_d=0.70$]{\includegraphics[width=.30\textwidth]{10_0.70.pdf}}
+
+% K_p = 20
+\subfigure[$K_p=20,\ K_d=0.80$]{\includegraphics[width=.30\textwidth]{20_0.80.pdf}}
+\subfigure[$K_p=20,\ K_d=0.95$]{\includegraphics[width=.30\textwidth]{20_0.95.pdf}}
+\subfigure[$K_p=20,\ K_d=1.30$]{\includegraphics[width=.30\textwidth]{20_1.30.pdf}}
+
+\caption{Πλέγμα δοκιμών PD: κάθε σειρά αντιστοιχεί σε σταθερό $K_p$ (1, 5, 10, 20) και κάθε στήλη σε διαφορετικό $K_d$.}
+\label{fig:pd-trials-grid}
+\end{figure}
+
+Παρατηρούμε ότι η αύξηση του \(K_p\) βελτιώνει το σφάλμα μόνιμης κατάστασης, (βλέπουμε και στις μετρήσεις ότι μειώνεται από \(19.34 \deg \text{σε} 2.28 \deg\)), όμως δεν καταφέρνει να το μηδενίσει. Αυτό ήταν αναμενόμενο, καθώς δεν υπάρχει κάποια αντιστάθμιση της βαρύτητας, όπως θα δούμε στο επόμενο κομμάτι. 
+
+Παράλληλα η αύξηση του όρου διαφόρισης \(K_d\) προκαλεί αφενός ελαφρά αύξηση του χρόνου ανύψωσης, αφετέρου ρίχνει σημαντικά το ποσοστό υπερύψωσης. Εξομαλύνει έτσι τη ταλαντωτική συμπεριφορά του συστήματος, μειώνοντας από 10 μέχρι 20 φορές το ποσοστό υπερύψωσης, ενώ ο χρόνος ανύψωσης αυξάνεται μόλις 2 με 3 φορές (από την ήδη χαμηλή τιμή του). 
+
+Η πορεία του βέλτιστου ζεύγους είναι η εξής:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.48\textwidth]{best_Kpd.pdf}
+    \includegraphics[width=0.48\textwidth]{ess_Kpd.pdf}
+    \caption{Βέλτιστο ζεύγος \(K_d\) και αντίστοιχο \(e_{ss}\) ανά \(K_p\).}
+    \label{fig:best-kpd}
+\end{figure}
+
+Βλέπουμε ότι όσο αυξάνεται ο αναλογικός όρος \(K_p\) μειώνεται η απαιτούμενη αύξηση του \(K_d\) γιά να αντιμετωπιστούν οι ταλαντώσεις του, ενώ μειώνεται και η μείωση του σφάλματος μόνιμης κατάστασης. Και οι δύο αυτές παρατηρήσεις μας οδηγούν ότι υπάρχει ιδανικό ζεύγος παραμέτρων είναι το \((20,\ 0.95)\), αφού πέραν αυτού αύξηση είτε του \(K_p\) είτε του \(K_d\) δεν μας προσφέρει κάτι παραπάνω. Στο ζεύγος αυτό θα βασιστούμε για τη βελτίωση με χρήση αντιστάθμισης.
+
+\section{Αντιστάθμιση Βαρύτητας}
+
+
+
+\section{Μη Γραμμικός Ελεγκτής 2 φάσεων}
+
+Στο τελευταίο μέρος του πειράματος μελετήθηκε η λειτουργία ενός \textbf{μη-γραμμικού ελεγκτή δύο φάσεων} για την εξισορρόπηση του αναστροφου εκκρεμούς στη μεσαία θέση ασταθούς ισορροπίας (\emph{middle balancing position}). Η πειραματική διάταξη που έχουμε (το σύστημα είναι υπο-οδηγούμενο) επιτρέπει την έμμεση επιρροή της κίνησης του δεύτερου συνδέσμου μέσω των επιταχύνσεων που επιβάλλονται στον πρώτο. Ο συγκεκριμένος ελεγκτής αποτελείται από δύο φάσεις ελέγχου, τη φάση της ταλάντωσης και τη φάση της εξισορρόπησης.
+
+Στη \textbf{φάση ταλάντωσης}, στόχος του ελεγκτή είναι το εκκρεμές να προσεγγίσει την επιθυμητή θέση ισορροπίας μέσω της αύξησης της μηχανικής ενέργειας του συστήματος. Η δυναμική εξίσωση του συστήματος έχει τη μορφή:
+\[
+\dot{x} = A x + b u + d(x)
+\]
+όπου $x$ το διάνυσμα κατάστασης, $u$ η ροπή στο πρώτο σύνδεσμο και $d(x)$ οι μη γραμμικοί όροι. Στη φάση αυτή πραγματοποιούνται ελεγχόμενες ταλαντώσεις στην πρώτη άρθρωση, μεταφέροντας ενέργεια στη δεύτερη άρθρωση. Η πρώτη φάση ολοκληρώνεται όταν το σύστημα πλησιάσει τη μεσαία θέση ισορροπίας.
+
+Έπειτα, ενεργοποιείται η \textbf{φάση εξισορρόπησης}, όπου ο ελεγκτής βασίζεται στη μη-γραμμική συνάρτηση Lyapunov που έχει τη μορφή:
+\[
+V_i(x,t) = \ln\bigl(1 + x^T P x\bigr)
+\]
+Επιλέγεται η λογαριθμική συνάρτηση Lyapunov για να εξασφαλιστεί θετική τιμή και καλύτερη προσέγγιση, καθώς παρέχει ανοχή σε μη γραμμικές μεταβολές.
+
+Κατά την διεξαγωγή του πειράματος η επιθυμητή μεσαία θέση επιτεύχθηκε με επιτυχία σε μικρό χρονικό διάστημα και με λιγοστές αλλαγές επιτάχυνσης από τον μη γραμμικό ελεγκτή δύο φάσεων. Επιπλέον, σε μεταβολή της θέσης μετά την ισορροπία, η φάση εξισορρόπησης εξασφαλίζει την επαναφορά στην επιθυμητή θέση. Επομένως, διαπιστώνεται επιτυχής λειτουργία του ελεγκτή.
+
+\end{document}

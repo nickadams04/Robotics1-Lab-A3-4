@@ -1,0 +1,63 @@
+# VS Code settings and workspace files
+.vscode/
+.history/
+*.code-workspace
+
+# OS-specific junk
+.DS_Store
+Thumbs.db
+
+# LaTeX auxiliary and intermediate files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.lof
+*.lot
+*.toc
+*.out
+*.run.xml
+*.synctex.gz
+*.synctex
+*.xdv
+*.ilg
+*.idx
+*.ind
+*.nav
+*.snm
+*.vrb
+*.loe
+*.loa
+*.loc
+*.lol
+*.maf
+*.mtc*
+*.pdfsync
+
+
+# MATLAB generated files
+*.asv
+*.mex*
+
+# Backup / temporary files
+*~
+*.swp
+*.swo
+*.tmp
+*.bak
+
+# macOS and Windows trash
+.Spotlight-V100
+.Trashes
+$RECYCLE.BIN/
+
+# Other common build / cache directories
+**/build/
+**/dist/
+**/out/
+**/.cache/
+
+Lab1-2/Pendubot - Διαγράμματα/
